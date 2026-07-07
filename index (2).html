@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un rendez-vous à Paris ?</title>
+<style>
+  :root{
+    --rose-fond: #ffd7e0;
+    --rose-fond-2: #ffc2d1;
+    --rose-fonce: #e8879e;
+    --or: #d4af6a;
+    --or-clair: #b5546b;
+    --rose: #c96b83;
+    --creme: #4a1f2b;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 20%, var(--rose-fond), var(--rose-fond-2) 70%);
+    font-family: 'Georgia', 'Iowan Old Style', serif;
+    color: var(--creme);
+  }
+
+  #ciel {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .etoile {
+    position: absolute;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    animation: scintiller 3s ease-in-out infinite;
+  }
+
+  @keyframes scintiller {
+    0%, 100% { opacity: 0.15; transform: scale(0.9); }
+    50% { opacity: 0.6; transform: scale(1.05); }
+  }
+
+  main {
+    position: relative;
+    z-index: 2;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: var(--or);
+    margin-bottom: 18px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-weight: 400;
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    line-height: 1.25;
+    margin: 0 0 8px 0;
+    max-width: 700px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--or-clair);
+  }
+
+  .date {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--rose);
+    margin-bottom: 40px;
+    letter-spacing: 0.04em;
+  }
+
+  #tour {
+    width: 90px;
+    margin-bottom: 28px;
+    opacity: 0.95;
+    animation: battement 1.6s ease-in-out infinite;
+  }
+
+  .boutons {
+    position: relative;
+    display: flex;
+    gap: 22px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-height: 70px;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  button {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    padding: 15px 34px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  #oui {
+    background: linear-gradient(135deg, #ff8fa3, #e8607e);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(232, 96, 126, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #oui .coeur {
+    display: inline-block;
+    animation: battement 1.1s ease-in-out infinite;
+  }
+
+  @keyframes battement {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+  }
+
+  #oui:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 30px rgba(232, 96, 126, 0.55);
+  }
+
+  #non {
+    background: rgba(255, 255, 255, 0.4);
+    color: var(--creme);
+    border: 1px solid rgba(74, 31, 43, 0.25);
+    position: relative;
+  }
+
+  #non.deplacement {
+    position: fixed;
+  }
+
+  .apres {
+    display: none;
+    max-width: 600px;
+  }
+
+  .apres.visible {
+    display: block;
+    animation: apparition 0.6s ease;
+  }
+
+  @keyframes apparition {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .apres p {
+    color: var(--rose);
+    font-size: 1.05rem;
+    margin-top: 6px;
+  }
+
+  .fleurs {
+    font-size: 1.6rem;
+    letter-spacing: 0.15em;
+    margin: 4px 0;
+    animation: flotter 2.5s ease-in-out infinite;
+  }
+
+  @keyframes flotter {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .compteur {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: rgba(74, 31, 43, 0.45);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: 0.1em;
+    z-index: 2;
+  }
+
+  #confettis {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .confetti {
+    position: absolute;
+    top: -10px;
+    border-radius: 2px;
+    animation: tomber linear forwards;
+  }
+
+  @keyframes tomber {
+    to { transform: translateY(110vh) rotate(540deg); opacity: 0.3; }
+  }
+</style>
+</head>
+<body>
+
+<div id="ciel"></div>
+<div id="confettis"></div>
+
+<main>
+  <div class="eyebrow" id="etape1">Une invitation</div>
+
+  <svg id="tour" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 88
+             C 50 88, 8 62, 8 32
+             C 8 14, 24 4, 38 12
+             C 44 15, 48 22, 50 28
+             C 52 22, 56 15, 62 12
+             C 76 4, 92 14, 92 32
+             C 92 62, 50 88, 50 88 Z"
+          fill="#ff6f91" stroke="#e8607e" stroke-width="1.5"/>
+    <text x="50" y="46" text-anchor="middle" font-family="Georgia, serif"
+          font-style="italic" font-size="15" fill="#fff">Louise</text>
+  </svg>
+
+  <div id="etape1-texte">
+    <h1>Est-ce que tu veux bien venir<br>te promener à <em>Paris</em> avec moi ?</h1>
+    <div class="date">Mardi 14 — un tour à Montmartre, un café en terrasse, et toi</div>
+  </div>
+
+  <div class="boutons" id="zoneBoutons">
+    <button id="oui" onclick="direOui()"><span class="coeur">♥</span> Oui, avec plaisir</button>
+    <button id="non" onclick="fuir()">Non</button>
+  </div>
+
+  <div class="apres" id="apres">
+    <div class="fleurs">🌸 🌷 🌹 🌷 🌸</div>
+    <h1>Je t'aime, ma charming woman.</h1>
+    <p>Mardi 14, Paris, toi et moi. J'ai déjà hâte.</p>
+    <div class="fleurs">🌸 🌷 🌹 🌷 🌸</div>
+  </div>
+</main>
+
+<div class="compteur" id="compteur"></div>
+
+<script>
+// ---- petits coeurs flottants ----
+const ciel = document.getElementById('ciel');
+for (let i = 0; i < 40; i++) {
+  const e = document.createElement('div');
+  e.className = 'etoile';
+  e.textContent = '♥';
+  e.style.left = Math.random() * 100 + '%';
+  e.style.top = Math.random() * 100 + '%';
+  e.style.animationDelay = (Math.random() * 3) + 's';
+  ciel.appendChild(e);
+}
+
+// ---- le bouton non qui fuit ----
+const boutonNon = document.getElementById('non');
+const zone = document.getElementById('zoneBoutons');
+let tentatives = 0;
+const compteur = document.getElementById('compteur');
+const messages = [
+  "essaie encore",
+  "presque !",
+  "il est timide",
+  "allez, encore un effort",
+  "il ne veut vraiment pas être cliqué",
+  "je crois que c'est un signe",
+  "abandon conseillé"
+];
+
+function fuir() {
+  tentatives++;
+  boutonNon.classList.add('deplacement');
+
+  const marge = 60;
+  const w = boutonNon.offsetWidth;
+  const h = boutonNon.offsetHeight;
+  const maxX = window.innerWidth - w - marge;
+  const maxY = window.innerHeight - h - marge;
+
+  const x = marge/2 + Math.random() * Math.max(maxX, 50);
+  const y = marge/2 + Math.random() * Math.max(maxY, 50);
+
+  boutonNon.style.left = x + 'px';
+  boutonNon.style.top = y + 'px';
+
+  const msg = messages[Math.min(tentatives - 1, messages.length - 1)];
+  compteur.textContent = tentatives + " tentative" + (tentatives > 1 ? "s" : "") + " · " + msg;
+}
+
+// le bouton fuit aussi juste au survol après la 2e tentative, pour faire bonne mesure
+boutonNon.addEventListener('mouseenter', () => {
+  if (tentatives >= 2) fuir();
+});
+
+function direOui() {
+  document.getElementById('etape1').style.display = 'none';
+  document.getElementById('etape1-texte').style.display = 'none';
+  document.querySelector('#tour').style.display = 'none';
+  document.getElementById('zoneBoutons').style.display = 'none';
+  compteur.style.display = 'none';
+  document.getElementById('apres').classList.add('visible');
+  lancerConfettis();
+}
+
+function lancerConfettis() {
+  const conteneur = document.getElementById('confettis');
+  const couleurs = ['#ff8fa3', '#e8607e', '#ffd7e0', '#c96b83', '#fff0f3'];
+  for (let i = 0; i < 140; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      const taille = 6 + Math.random() * 6;
+      c.style.width = taille + 'px';
+      c.style.height = taille * 0.4 + 'px';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.background = couleurs[Math.floor(Math.random() * couleurs.length)];
+      c.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+      conteneur.appendChild(c);
+      setTimeout(() => c.remove(), 5000);
+    }, i * 20);
+  }
+}
+</script>
+
+</body>
+</html>
